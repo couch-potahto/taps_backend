@@ -41,18 +41,24 @@ class FamilyMember(models.Model):
 		(EMPLOYED, 'Employed'),
 	)
 
-	name = models.CharField(max_length=255):
+	name = models.CharField(max_length=255)
 	gender = models.CharField(max_length=1, choices = GENDER_CHOICES)
 	marital_status = models.IntegerField(choices=MARITAL_STATUSES, default=SINGLE)
 	spouse = models.OneToOneField(
-		FamilyMember,
-		on_delete=SET_NULL,
+		'self',
+		on_delete=models.SET_NULL,
 		null=True,
 		blank=True,
 	)
 	occupation_type = models.IntegerField(choices=OCCUPATIONS, default=UNEMPLOYED)
 	annual_income = models.PositiveIntegerField(default = 0)
 	date_of_birth = models.DateField()
-
+	household = models.ForeignKey(
+		Household,
+		related_name='family_members',
+		on_delete=models.SET_NULL,
+		null=True,
+		blank=True,
+	)
 
 
