@@ -10,7 +10,11 @@ class Household(models.Model):
 		(LANDED, 'Landed'),
 		(CONDOMINIUM, 'Condominium'),
 	)
-	housing_type = models.IntegerField(choices=HOUSING_TYPES)
+	housing_type = models.IntegerField(
+		choices=HOUSING_TYPES,
+		null=False,
+		blank=False
+	)
 
 class FamilyMember(models.Model):
 
