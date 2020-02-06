@@ -1,23 +1,39 @@
 from django.db import models
-
+from datetime import date
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 class Household(models.Model):
-	HDB = 1
-	LANDED = 2
-	CONDOMINIUM = 3
-	HOUSING_TYPES = (
-		(HDB, 'HDB'),
-		(LANDED, 'Landed'),
-		(CONDOMINIUM, 'Condominium'),
-	)
+
+	class HousingType(models.IntegerChoices):
+		HDB = 1, _('HDB')
+		LANDED = 2, _('Landed')
+		CONDOMINIUM = 3, _('Condominium')
+
 	housing_type = models.IntegerField(
-		choices=HOUSING_TYPES,
+		choices=HousingType.choices,
 		null=False,
 		blank=False
 	)
 
 	def get_household_size(self):
 		return self.family_members.all().count()
+
+	def get_total_income(self):
+		return sum(member.annual_income for member in self.family_members.all())
+
+	def age_less_than(self, age_limit): #returns list of people less than or equal to an age limit
+		print('THERE')
+		print(self.family_members.all())
+		return list(filter(lambda x:
+			date.today().year - x.date_of_birth.year - ((date.today().month, date.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) <= age_limit,
+			self.family_members.all()
+			))
+
+	def age_more_than(self, age_limit): #returns list of people more than or equal to an age limit
+		return list(filter(lambda x:
+			date.today().year - x.date_of_birth.year - ((data.today().month, data.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) >= age_limit,
+			self.family_members.all()
+			))
 
 class FamilyMember(models.Model):
 

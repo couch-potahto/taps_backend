@@ -7,7 +7,7 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-
+from .grant_filters import *
 #@api_view(['GET', 'POST'])
 class HouseholdList(APIView):
 
@@ -47,24 +47,28 @@ class HouseholdDetail(APIView):
 		print(serializer)
 		return Response(serializer.data)
 
-class HouseholdQueryList(generics.ListAPIView):
-	serializer_class = HouseholdSerializer
+class HouseholdQueryList(APIView):
+	'''
 	grants = {
-		1: 'Student Encouragement Bonus',
+		1: student_encouragement_bonus,
 		2: 'Family Togetherness Scheme',
 		3: 'Elder Bonus',
 		4: 'Baby Sunshine Grant',
 		5: 'YOLO GST Grant'
-	}
+	}'''
 	''' change to slug '''
-	def get_queryset(self):
+	def get(self,request,household_size, total_income, grant_type, format=None):
 		queryset = Household.objects.all()
 		print(type(queryset))
 		serializer = HouseholdSerializer(queryset, many=True)
 		household_size = self.kwargs['household_size']
 		total_income = self.kwargs['total_income']
 		grant_type = self.kwargs['grant_type']
+		'''if no size given, give all'''
+
 		queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
-		print(queryset)
+		queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
+		return student_encouragement_bonus(queryset)
+
 		#print(household_size)
 
