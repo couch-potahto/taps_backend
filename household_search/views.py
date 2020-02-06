@@ -56,8 +56,22 @@ class HouseholdQueryList(APIView):
 		4: 'Baby Sunshine Grant',
 		5: 'YOLO GST Grant'
 	}'''
+	grants = {
+		'student_encouragement_bonus': student_encouragement_bonus,
+		'family_togetherness_scheme': family_togetherness_scheme,
+		#'elder_bonus': elder_bonus,
+		#'baby_sunshine_grant': baby_sunshine_grant,
+		#'yolo_gst_grant': yolo_gst_grant
+	}
 	''' change to slug '''
 	def get(self,request,household_size, total_income, grant_type, format=None):
+		grants = {
+		'student_encouragement_bonus': student_encouragement_bonus,
+		'family_togetherness_scheme': family_togetherness_scheme,
+		#'elder_bonus': elder_bonus,
+		#'baby_sunshine_grant': baby_sunshine_grant,
+		#'yolo_gst_grant': yolo_gst_grant
+		}
 		queryset = Household.objects.all()
 		print(type(queryset))
 		serializer = HouseholdSerializer(queryset, many=True)
@@ -68,7 +82,7 @@ class HouseholdQueryList(APIView):
 
 		queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
 		queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
-		return student_encouragement_bonus(queryset)
+		return grants[grant_type](queryset)
 
 		#print(household_size)
 

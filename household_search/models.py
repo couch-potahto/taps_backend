@@ -1,16 +1,17 @@
 from django.db import models
 from datetime import date
-from django.utils.translation import gettext_lazy as _
 # Create your models here.
 class Household(models.Model):
-
-	class HousingType(models.IntegerChoices):
-		HDB = 1, _('HDB')
-		LANDED = 2, _('Landed')
-		CONDOMINIUM = 3, _('Condominium')
-
+	HDB = 1
+	LANDED = 2
+	CONDOMINIUM = 3
+	HOUSING_TYPES = (
+		(HDB, 'HDB'),
+		(LANDED, 'Landed'),
+		(CONDOMINIUM, 'Condominium'),
+	)
 	housing_type = models.IntegerField(
-		choices=HousingType.choices,
+		choices=HOUSING_TYPES,
 		null=False,
 		blank=False
 	)
@@ -22,18 +23,26 @@ class Household(models.Model):
 		return sum(member.annual_income for member in self.family_members.all())
 
 	def age_less_than(self, age_limit): #returns list of people less than or equal to an age limit
-		print('THERE')
-		print(self.family_members.all())
 		return list(filter(lambda x:
 			date.today().year - x.date_of_birth.year - ((date.today().month, date.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) <= age_limit,
 			self.family_members.all()
-			))
+		))
 
 	def age_more_than(self, age_limit): #returns list of people more than or equal to an age limit
 		return list(filter(lambda x:
 			date.today().year - x.date_of_birth.year - ((data.today().month, data.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) >= age_limit,
 			self.family_members.all()
-			))
+		))
+
+	def get_spouse(self): #can have multiple pairs of married couples living together (Father, Mother and Son, Daughter-in-Law)
+		are_married = list(filter(lambda x: x.marital_status == MARRIED, self.family_members.all()))
+		husband_and_wife = []
+		for individual in are_married:
+			if individual.spouse in are_married and individual.spouse not in husband_and_wife:
+				husband_and_wife.append(individual)
+				husband_and_wife.append(individual.spouse)
+				break
+		return husband_and_wife
 
 class FamilyMember(models.Model):
 
