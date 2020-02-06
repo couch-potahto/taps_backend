@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import *
@@ -35,7 +35,7 @@ class HouseholdDetail(APIView):
 
 	def get(self,request,pk,format=None):
 		household = self.get_object(pk)
-		serializer = HouseholdSerializer(household)
+		serializer = ShowHouseholdSerializer(household)
 		return Response(serializer.data)
 
 	def patch(self, request, pk, member_id, format=None):
@@ -46,3 +46,25 @@ class HouseholdDetail(APIView):
 		serializer = HouseholdSerializer(household)
 		print(serializer)
 		return Response(serializer.data)
+
+class HouseholdQueryList(generics.ListAPIView):
+	serializer_class = HouseholdSerializer
+	grants = {
+		1: 'Student Encouragement Bonus',
+		2: 'Family Togetherness Scheme',
+		3: 'Elder Bonus',
+		4: 'Baby Sunshine Grant',
+		5: 'YOLO GST Grant'
+	}
+	''' change to slug '''
+	def get_queryset(self):
+		queryset = Household.objects.all()
+		print(type(queryset))
+		serializer = HouseholdSerializer(queryset, many=True)
+		household_size = self.kwargs['household_size']
+		total_income = self.kwargs['total_income']
+		grant_type = self.kwargs['grant_type']
+		queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
+		print(queryset)
+		#print(household_size)
+

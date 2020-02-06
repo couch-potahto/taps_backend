@@ -16,6 +16,9 @@ class Household(models.Model):
 		blank=False
 	)
 
+	def get_household_size(self):
+		return self.family_members.all().count()
+
 class FamilyMember(models.Model):
 
 	MALE = 'M'
