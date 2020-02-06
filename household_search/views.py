@@ -36,7 +36,6 @@ class HouseholdDetail(APIView):
 	def get(self,request,pk,format=None):
 		household = self.get_object(pk)
 		serializer = HouseholdSerializer(household)
-		print('LOLOLOL')
 		return Response(serializer.data)
 
 	def patch(self, request, pk, member_id, format=None):
@@ -44,6 +43,6 @@ class HouseholdDetail(APIView):
 		new_member = FamilyMember.objects.get(pk=member_id)
 		new_member.household = household
 		new_member.save()
-		print(household.family_members)
 		serializer = HouseholdSerializer(household)
+		print(serializer)
 		return Response(serializer.data)
