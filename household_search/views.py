@@ -48,27 +48,12 @@ class HouseholdDetail(APIView):
 		return Response(serializer.data)
 
 class HouseholdQueryList(APIView):
-	'''
-	grants = {
-		1: student_encouragement_bonus,
-		2: 'Family Togetherness Scheme',
-		3: 'Elder Bonus',
-		4: 'Baby Sunshine Grant',
-		5: 'YOLO GST Grant'
-	}'''
-	grants = {
-		'student_encouragement_bonus': student_encouragement_bonus,
-		'family_togetherness_scheme': family_togetherness_scheme,
-		#'elder_bonus': elder_bonus,
-		#'baby_sunshine_grant': baby_sunshine_grant,
-		#'yolo_gst_grant': yolo_gst_grant
-	}
-	''' change to slug '''
+
 	def get(self,request,household_size, total_income, grant_type, format=None):
 		grants = {
 		'student_encouragement_bonus': student_encouragement_bonus,
 		'family_togetherness_scheme': family_togetherness_scheme,
-		#'elder_bonus': elder_bonus,
+		'elder_bonus': elder_bonus,
 		#'baby_sunshine_grant': baby_sunshine_grant,
 		#'yolo_gst_grant': yolo_gst_grant
 		}
