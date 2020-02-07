@@ -30,7 +30,7 @@ class Household(models.Model):
 
 	def age_more_than(self, age_limit): #returns list of people more than or equal to an age limit
 		return list(filter(lambda x:
-			date.today().year - x.date_of_birth.year - ((data.today().month, data.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) >= age_limit,
+			date.today().year - x.date_of_birth.year - ((date.today().month, date.today().day) < (x.date_of_birth.month, x.date_of_birth.day)) >= age_limit,
 			self.family_members.all()
 		))
 

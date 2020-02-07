@@ -63,6 +63,7 @@ class HouseholdQueryList(APIView):
 		household_size = self.kwargs['household_size']
 		total_income = self.kwargs['total_income']
 		grant_type = self.kwargs['grant_type']
+		print(grant_type)
 		'''if no size given, give all'''
 
 		queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))

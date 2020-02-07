@@ -51,3 +51,15 @@ def elder_bonus(household_iter):
 		}
 		response_data['elder_bonus'].append(house_data)
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def baby_sunshine_grant(household_iter):
+	response_data = {'baby_sunshine_grant':[]}
+	household_iter = list(filter(lambda x: len(x.age_less_than(5))>0, household_iter))
+	for house in household_iter:
+		qualified_members = FamilyMemberSerializer(house.age_less_than(5), many=True, read_only=True)
+		house_data = {
+			'housing_type': house.get_housing_type_display(),
+			'qualified_members': qualified_members.data,
+		}
+		response_data['baby_sunshine_grant'].append(house_data)
+	return HttpResponse(json.dumps(response_data), content_type="application/json")
