@@ -63,3 +63,15 @@ def baby_sunshine_grant(household_iter):
 		}
 		response_data['baby_sunshine_grant'].append(house_data)
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def yolo_gst_grant(household_iter):
+	response_data = {'yolo_gst_grant': []}
+	household_iter = list(filter(lambda x: x.get_total_income() < 100000, household_iter))
+	for house in household_iter:
+		qualified_members = FamilyMemberSerializer(house.family_members.all(), many=True, read_only=True)
+		house_data = {
+			'housing_type': house.get_housing_type_display(),
+			'qualified_members': qualified_members.data,
+		}
+		response_data['baby_sunshine_grant'].append(house_data)
+	return HttpResponse(json.dumps(response_data), content_type="application/json")

@@ -54,8 +54,8 @@ class HouseholdQueryList(APIView):
 		'student_encouragement_bonus': student_encouragement_bonus,
 		'family_togetherness_scheme': family_togetherness_scheme,
 		'elder_bonus': elder_bonus,
-		#'baby_sunshine_grant': baby_sunshine_grant,
-		#'yolo_gst_grant': yolo_gst_grant
+		'baby_sunshine_grant': baby_sunshine_grant,
+		'yolo_gst_grant': yolo_gst_grant
 		}
 		queryset = Household.objects.all()
 		print(type(queryset))
