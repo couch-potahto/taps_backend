@@ -44,12 +44,11 @@ class HouseholdDetail(APIView):
 		new_member.household = household
 		new_member.save()
 		serializer = HouseholdSerializer(household)
-		print(serializer)
 		return Response(serializer.data)
 
 class HouseholdQueryList(APIView):
 
-	def get(self,request,household_size, total_income, grant_type, format=None):
+	def get(self,request, grant_type, total_income=None, household_size=None, format=None):
 		grants = {
 		'student_encouragement_bonus': student_encouragement_bonus,
 		'family_togetherness_scheme': family_togetherness_scheme,
@@ -58,16 +57,18 @@ class HouseholdQueryList(APIView):
 		'yolo_gst_grant': yolo_gst_grant
 		}
 		queryset = Household.objects.all()
-		print(type(queryset))
 		serializer = HouseholdSerializer(queryset, many=True)
-		household_size = self.kwargs['household_size']
-		total_income = self.kwargs['total_income']
 		grant_type = self.kwargs['grant_type']
 		print(grant_type)
 		'''if no size given, give all'''
-
-		queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
-		queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
+		if 'household_size' in self.kwargs:
+			household_size = self.kwargs['household_size']
+			print(household_size)
+			queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
+		if 'total_income' in self.kwargs:
+			total_income = self.kwargs['total_income']
+			print(total_income)
+			queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
 		return grants[grant_type](queryset)
 
 		#print(household_size)
