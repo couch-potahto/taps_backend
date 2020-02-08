@@ -2,25 +2,25 @@
  
 ## Installation Guide
 First, clone this repository into your local machine
-Next, ensure that you have Python 3 and pip installed.
+Next, ensure that you have Python 3 and pip3 installed.
 Then, install Django and Django Rest Framework with the following commands:
 
 ```bash
-pip install django
-pip install djangorestframework
+pip3 install django
+pip3 install djangorestframework
 ```
 
 Sample Household and Family Members object have already been created in the sqlite3 database. 
 In order to set up the database, first ```cd taps_backend```, then run the following command:
 
 ```python
-python manage.py migrate
+python3 manage.py migrate
 ```
 
 After the migration is completed, the server can be fired up with the following command:
 
 ```python
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 The server can be accessed via ```localhost:8000```.
