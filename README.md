@@ -11,7 +11,7 @@ pip install djangorestframework
 ```
 
 Sample Household and Family Members object have already been created in the sqlite3 database. 
-In order to set up the database, run the following command:
+In order to set up the database, first ```cd taps_backend```, then run the following command:
 
 ```python
 python manage.py migrate
