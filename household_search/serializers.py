@@ -15,12 +15,19 @@ class ShowFamilyMemberSerializer(FamilyMemberSerializer):
 		exclude = ['spouse', 'household']
 
 class HouseholdSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Household
+		fields = "__all__"
+
+class HouseholdDisplaySerializer(serializers.ModelSerializer):
+
 	family_members = FamilyMemberSerializer(many=True)
 	housing_type = serializers.CharField(source='get_housing_type_display')
+
 	class Meta:
 		model = Household
 		fields = ('housing_type', 'family_members')
 
-
 class ShowHouseholdSerializer(HouseholdSerializer):
 	family_members = ShowFamilyMemberSerializer(many=True, read_only=True)
+	housing_type = serializers.CharField(source='get_housing_type_display')

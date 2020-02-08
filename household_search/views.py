@@ -7,17 +7,18 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from .grant_filters import *
-
+from django.http import HttpResponse, Http404
 
 class HouseholdList(APIView):
 
 	def get(self, request, format=None):
 		households = Household.objects.all()
-		serializer = HouseholdSerializer(households, many=True)
+		serializer = HouseholdDisplaySerializer(households, many=True)
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
 		serializer = HouseholdSerializer(data=request.data)
+		print(request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -40,18 +41,10 @@ class HouseholdDetail(APIView):
 			raise Http404
 		serializer = ShowHouseholdSerializer(household)
 		return Response(serializer.data)
-		'''
-	def patch(self, request, pk, member_id, format=None):
-		household = self.get_object(pk)
-		new_member = FamilyMember.objects.get(pk=member_id)
-		new_member.household = household
-		new_member.save()
-		serializer = HouseholdSerializer(household)
-		return Response(serializer.data)
-	'''
+
 	def delete(self, request, pk, format=None):
 		try:
-			household = self.get_object(pk)
+			household = self.get_object(pk=pk)
 		except Household.DoesNotExist:
 			raise Http404
 		household.delete()
@@ -67,7 +60,8 @@ class EditHouseholdMembers(APIView):
 
 	def post(self, request, pk, member_id, format=None):
 		try:
-			household = self.get_object(pk)
+			household = Household.objects.get(pk=pk)
+			print(household)
 		except Household.DoesNotExist:
 			raise Http404
 		try:
@@ -112,13 +106,3 @@ class HouseholdQueryList(APIView):
 			print(total_income)
 			queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
 		return grants[grant_type](queryset)
-
-def remove_member_from_household(request, pk):
-	member_to_remove = FamilyMember.objects.get(pk=pk)
-	household_pk = member_to_remove.household
-	print(household_pk)
-	member_to_remove.household = None
-	member_to_remove.save()
-	household = Household.objects.get(pk=household_pk)
-	serializer = HouseholdSerializer(household)
-	return Response(serializer.data)
