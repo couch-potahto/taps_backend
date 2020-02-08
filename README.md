@@ -3,6 +3,11 @@
 ## Installation Guide
 First, clone this repository into your local machine
 Next, ensure that you have Python 3 and pip3 installed.
+```bash
+sudo apt-get update 
+sudo apt-get install python3.7
+sudo apt install python3-pip
+```
 Then, install Django and Django Rest Framework with the following commands:
 
 ```bash
