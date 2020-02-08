@@ -77,9 +77,13 @@ class EditHouseholdMembers(APIView):
 			member_to_remove = FamilyMember.objects.get(pk=member_id)
 		except FamilyMember.DoesNotExist:
 			raise Http404
-		member_to_remove.household = None
-		member_to_remove.save()
-		return Response(status=status.HTTP_200_OK)
+		print(member_to_remove.household.pk)
+		if member_to_remove.household.pk != pk:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
+		else:
+			member_to_remove.household = None
+			member_to_remove.save()
+			return Response(status=status.HTTP_200_OK)
 
 class HouseholdQueryList(APIView):
 
