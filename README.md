@@ -33,7 +33,7 @@ The server can be accessed via ```localhost:8000```.
 ## API Reference
 
 This section serves to summarize the endpoints for the various actions implemented.
-1) Create Household: ```POST http://localhost:8000/api/household/housing_type=x```, where x is an integer that can be 1 = HDB, 2 = LANDED, 3 = CONDOMINIUM
+1) Create Household: ```POST http://localhost:8000/api/household/ housing_type=x```, where x is an integer that can be 1 = HDB, 2 = LANDED, 3 = CONDOMINIUM
 
 2) Add Family Member to Household: ```POST http://localhost:8000/api/household/<house_pk>/member/<member_pk/```, where member_pk is the primary key of the Family Member instance you wish to add to Household instance of primary key house_pk
 
