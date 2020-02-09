@@ -56,6 +56,8 @@ income and size are optional parameters that can be passed when the need arises,
 
 7) Delete Family Member ```DELETE http://127.0.0.1:8000/api/household/<house_pk>/member/<member_pk>```, which will remove family member of primary key <member_pk> from household of primary key <house_pk>
 
-## Assumptions for Grant Results
-1) Only family members taken into account for grant eligibility will be shown alongside the household.
-2) The optional ```income``` parameter refers to an income ceiling, i.e. only households under a certain total annual income as specified by the ```income``` parameter will be considered and listed out
+## Assumptions
+1) Family Member instances are assumed to exist beforehand.
+2) A Family Member instance can only belong to one household
+3) Only family members taken into account for grant eligibility will be shown alongside the household.
+4) The optional ```income``` parameter refers to an income ceiling, i.e. only households under a certain total annual income as specified by the ```income``` parameter will be considered and listed out
