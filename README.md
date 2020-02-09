@@ -35,8 +35,8 @@ The server can be accessed via ```http://127.0.0.1:8000```.
 This section serves to summarize the endpoints for the various actions implemented.
 1) Create Household: ```POST http://127.0.0.1:8000/api/household/ housing_type=x```, where x is an integer that can be 1 = HDB, 2 = LANDED, 3 = CONDOMINIUM
 
-2) Add Family Member to Household: ```POST http://127.0.0.1:8000/api/household/<house_pk>/member name=<string: name> gender=<string: gender> marital_status=<integer: marital_status> *spouse = <integer:spouse_pk> occupation_type = <integer: occupation_type> annual_income=<integer: annual_income> date_of_birth=<yyyy-mm-dd>```. 
- ```gender``` accepts either 'M' or 'F'
+2) Add Family Member to Household: ```POST http://127.0.0.1:8000/api/household/<house_pk>/member name=<string: name> gender=<string: gender> marital_status=<integer: marital_status> *spouse = <integer:spouse_pk> occupation_type = <integer: occupation_type> annual_income=<integer: annual_income> date_of_birth=<yyyy-mm-dd>```.<br>
+ ```gender``` accepts either 'M' or 'F' <br>
  ```marital_status``` accepts 1,2,3,4 where 1=Single, 2=Engaged, 3=Married, 4=Divorced
  ```spouse``` is an optional field that accepts the primary key of another Family Member instance, and will default to null if none is provided
  ```occupation_type``` accepts 1,2,3, where 1=Unemployed, 2=Student, 3=Employed
