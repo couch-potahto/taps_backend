@@ -35,7 +35,11 @@ The server can be accessed via ```http://127.0.0.1:8000```.
 This section serves to summarize the endpoints for the various actions implemented.
 1) Create Household: ```POST http://127.0.0.1:8000/api/household/ housing_type=x```, where x is an integer that can be 1 = HDB, 2 = LANDED, 3 = CONDOMINIUM
 
-2) Add Family Member to Household: ```POST http://127.0.0.1:8000/api/household/<house_pk>/member/<member_pk>```, where member_pk is the primary key of the Family Member instance you wish to add to Household instance of primary key house_pk
+2) Add Family Member to Household: ```POST http://127.0.0.1:8000/api/household/<house_pk>/member name=<string: name> gender=<string: gender> marital_status=<integer: marital_status> *spouse = <integer:spouse_pk> occupation_type = <integer: occupation_type> annual_income=<integer: annual_income> date_of_birth=<yyyy-mm-dd>```. 
+ ```gender``` accepts either 'M' or 'F'
+ ```marital_status``` accepts 1,2,3,4 where 1=Single, 2=Engaged, 3=Married, 4=Divorced
+ ```spouse``` is an optional field that accepts the primary key of another Family Member instance, and will default to null if none is provided
+ ```occupation_type``` accepts 1,2,3, where 1=Unemployed, 2=Student, 3=Employed
 
 3) List Households: ```GET http://127.0.0.1:8000/api/household/```
 
@@ -52,12 +56,11 @@ This section serves to summarize the endpoints for the various actions implement
 
 income and size are optional parameters that can be passed when the need arises, and must follow the aforementioned format.
 
-6) Delete Household: ```DELETE http://127.0.0.1:8000/api/household/<house_pk>```, which will delete household of primary key <house_pk>
+6) Delete Household: ```DELETE http://127.0.0.1:8000/api/household/<house_pk>```, which will delete household of primary key <house_pk> along with all existing members in the household.
 
-7) Delete Family Member ```DELETE http://127.0.0.1:8000/api/household/<house_pk>/member/<member_pk>```, which will remove family member of primary key <member_pk> from household of primary key <house_pk>
+7) Delete Family Member ```DELETE http://127.0.0.1:8000/api/household/<house_pk>/member/<member_pk>```, which will delete family member of primary key <member_pk> from household of primary key <house_pk>.
 
 ## Assumptions
-1) Family Member instances are assumed to exist beforehand.
-2) A Family Member instance can only belong to one household
-3) Only family members taken into account for grant eligibility will be shown alongside the household.
-4) The optional ```income``` parameter refers to an income ceiling, i.e. only households under a certain total annual income as specified by the ```income``` parameter will be considered and listed out
+1) A Family Member instance can only belong to one household
+2) Only family members taken into account for grant eligibility will be shown alongside the household.
+3) The optional ```income``` parameter refers to an income ceiling, i.e. only households under a certain total annual income as specified by the ```income``` parameter will be considered and listed out
