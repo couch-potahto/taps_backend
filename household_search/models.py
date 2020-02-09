@@ -36,7 +36,6 @@ class Household(models.Model):
 
 	def get_spouse(self): #can have multiple pairs of married couples living together (Father, Mother and Son, Daughter-in-Law)
 		are_married = list(filter(lambda x: x.marital_status == 3, self.family_members.all()))
-		print(are_married)
 		husband_and_wife = []
 
 		for individual in are_married:
@@ -90,7 +89,7 @@ class FamilyMember(models.Model):
 	household = models.ForeignKey(
 		Household,
 		related_name='family_members',
-		on_delete=models.SET_NULL,
+		on_delete=models.CASCADE,
 		null=True,
 		blank=True,
 	)

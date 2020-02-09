@@ -18,7 +18,6 @@ class HouseholdList(APIView):
 
 	def post(self, request, format=None):
 		serializer = HouseholdSerializer(data=request.data)
-		print(request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -58,31 +57,33 @@ class EditHouseholdMembers(APIView):
 	add or remove members from household
 	'''
 
-	def post(self, request, pk, member_id, format=None):
+	def post(self, request, pk, format=None):
 		try:
 			household = Household.objects.get(pk=pk)
-			print(household)
 		except Household.DoesNotExist:
 			raise Http404
-		try:
-			new_member = FamilyMember.objects.get(pk=member_id)
-		except FamilyMember.DoesNotExist:
-			raise Http404
-		new_member.household = household
-		new_member.save()
-		return Response(status=status.HTTP_200_OK)
+		serializer = FamilyMemberSerializer(data=request.data)
+		if serializer.is_valid():
+			member = serializer.save()
+			member.household = household
+			member.save()
+			if "spouse" in request.data:
+				spouse_pk = int(request.data['spouse'])
+				member_spouse = FamilyMember.objects.get(pk=spouse_pk)
+				member_spouse.spouse = member
+				member_spouse.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	def delete(self, request, pk, member_id, format=None):
 		try:
 			member_to_remove = FamilyMember.objects.get(pk=member_id)
 		except FamilyMember.DoesNotExist:
 			raise Http404
-		print(member_to_remove.household.pk)
 		if member_to_remove.household.pk != pk:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		else:
-			member_to_remove.household = None
-			member_to_remove.save()
+			member_to_remove.delete()
 			return Response(status=status.HTTP_200_OK)
 
 class HouseholdQueryList(APIView):
@@ -103,10 +104,8 @@ class HouseholdQueryList(APIView):
 		'''if no size given, give all'''
 		if 'household_size' in self.kwargs:
 			household_size = self.kwargs['household_size']
-			print(household_size)
 			queryset = list(filter(lambda x: x.get_household_size() == household_size, queryset))
 		if 'total_income' in self.kwargs:
 			total_income = self.kwargs['total_income']
-			print(total_income)
 			queryset = list(filter(lambda x: x.get_total_income() <= total_income, queryset))
 		return grants[grant_type](queryset)

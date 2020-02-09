@@ -36,7 +36,6 @@ def family_togetherness_scheme(household_iter):
 def elder_bonus(household_iter):
 	response_data = {'elder_bonus':[]}
 	household_iter = list(filter(lambda x: len(x.age_more_than(50))>0, household_iter))
-	print(household_iter)
 	for house in household_iter:
 		qualified_members = FamilyMemberSerializer(house.age_more_than(50), many=True, read_only=True)
 		house_data = {
